@@ -9,7 +9,7 @@ export const createUser = (req,res) => {
     //console.log(req.body);
     let user = req.body;
     let createDate = new Date();
-    user = {...user, createAt:createDate, updateAt:createDate};
+    user = {...user, createdAt:createDate, updatedAt:createDate};
     //console.log(user);
     let result = UserService.createUsers(user);
     result
@@ -30,20 +30,19 @@ export const deleteUser = (req,res) => {
     res.send(`bonjour utilisateur supprimé`);
 }
 
+
 export const updateUser = (req,res) => {
-    //console.log(req.params); //patch modifie certains attributs alors que put modifie tous les attributs
-    let { id } = req.params;
-    let user = users.find((user) => user.id ==id);
-    let { email, password, bio, picture, isAdmin } = req.body;
-    if (email) user.email=email;
-    if (password) user.password=password;
-    if (bio) user.bio=bio;
-    if (picture) user.picture=picture;
-    if (isAdmin) user.isAdmin=isAdmin;
-    
-    
-    res.send(`bonjour utilisateur modifié`);
+    //console.log(req.body);
+    let user = req.body;
+    let createDate = new Date();
+    user = {...user, createdAt:createDate, updatedAt:createDate};
+    //console.log(user);
+    let result = UserService.updateUsers(user);
+    result
+    .then(data => res.json({success:true,message:`utilisateur modifié`,data:data}))
+    .catch(err => console.log(err));
 }
+//patch modifie certains attributs alors que put modifie tous les attributs
 
 export const getUsers = (req,res) => {
     const results = UserService.getAllUsers();
@@ -53,8 +52,9 @@ export const getUsers = (req,res) => {
 }
 
 export const getUserById = (req,res) => {
-    console.log(req.params); //req.params donne la liste des parametres passés dans l url
-    let { id } = req.params;
-    let user = users.find((user) => user.id ==id);
-    res.send(user);
+    const results = UserService.getUsersById();
+    results
+    .then(data => res.json({data:data}))
+    .catch((err) => console.log(err.message));
+    
 }
