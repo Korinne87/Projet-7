@@ -32,11 +32,28 @@ export const deleteUser = (req,res) => {
 
 
 export const updateUser = (req,res) => {
-    //console.log(req.body);
-    let user = req.body;
-    let createDate = new Date();
-    user = {...user, createdAt:createDate, updatedAt:createDate};
-    //console.log(user);
+    // recuperer l'identifiant du user a modifié
+    let { id } = req.params;
+    // recuperer toutes les infos qui sont envoyer pour modification
+    let { email, password, bio, picture, isAdmin } = req.body
+
+    // creer un objet user avec juste son identifiant au depart
+    let user = {id:id};
+
+    // on va ajouter les autres propriétés qui seront modifié
+    // seulement si les valeurs ont étét envoyées
+
+    if(email) user = {...user,email:email};
+    if(password) user = {...user,password:password};
+    if(bio) user = {...user,bio:bio};
+    if(picture) user = {...user,picture:picture};
+    if(isAdmin) user = {...user,isAdmin:isAdmin};
+
+    user = {...user, updatedAt:new Date()};
+
+    console.log(user);
+
+    /// pon passe  la fonction updateUser l'identifiant et les infos a modifié
     let result = UserService.updateUsers(user);
     result
     .then(data => res.json({success:true,message:`utilisateur modifiÃ©`,data:data}))
@@ -52,7 +69,9 @@ export const getUsers = (req,res) => {
 }
 
 export const getUserById = (req,res) => {
-    const results = UserService.getUsersById();
+    // recuperer l'identifiant de l'utilisateur
+    let { id } = req.params
+    const results = UserService.getUsersById(id);
     results
     .then(data => res.json({data:data}))
     .catch((err) => console.log(err.message));

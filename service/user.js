@@ -16,12 +16,12 @@ export class UserService {
         }
     }
 
-    static async getUsersById() {
+    static async getUsersById(id) {
         try {
          const response = await new Promise((resolve, reject) =>{
-             const query= "SELECT FROM USERS where id=?;";
+             const query= "SELECT * FROM USERS where id=?;";
              let db = DbService.getConnexion();
-             db.query(query,(err,results) =>{
+             db.query(query,[id],(err,results) =>{
                 if (err) reject(new Error(err.message));
                 resolve(results);
              });
@@ -62,12 +62,12 @@ export class UserService {
          console.log(error.message);
         }
     }
-    static async updateUsers({username, email, password, picture, bio, isAdmin, createdAt, updatedAt}) {
+    static async updateUsers({id,email, password, picture, bio, isAdmin,updatedAt}) {
         try {
-         const response = await new Promise((resolve, reject) =>{
-             const query= "UPDATE users SET username = ?, email = ?, password = ?, picture = ?, bio = ?, isAdmin = ?, createdAt = ?, updatedAt = ? WHERE id = ?";
+         const response = await new Promise((resolve, reject) => {
+             const query= "UPDATE users SET email = ?, password = ?, picture = ?, bio = ?, isAdmin = ?, updatedAt = ? WHERE id = ?";
              let db = DbService.getConnexion();
-             db.query(query,[username, email, password, picture, bio, isAdmin, createdAt, updatedAt], (err,result) =>{
+             db.query(query,[email, password, picture, bio, isAdmin, updatedAt,id], (err,result) =>{
                 if (err) reject(new Error(err.message));
                 resolve(result.affectedRows);
              });
