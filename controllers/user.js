@@ -1,6 +1,3 @@
-import { response } from 'express';
-import { v4 as uuidv4 } from 'uuid';
-import DbService from '../service/dbService.js';
 import { UserService } from '../service/user.js';
 
 let users = []
@@ -32,32 +29,36 @@ export const deleteUser = (req,res) => {
 
 
 export const updateUser = (req,res) => {
+
     // recuperer l'identifiant du user a modifié
     let { id } = req.params;
     // recuperer toutes les infos qui sont envoyer pour modification
     let { email, password, bio, picture, isAdmin } = req.body
 
-    // creer un objet user avec juste son identifiant au depart
-    let user = {id:id};
+    // on utilise notre fonction getUserById pour allez recuperer l'utilisateur a modifié
+    const result = UserService.getUsersById(id);
+    result.then(function(data) {
+        // on recupère l'utilisateur avec l'identifiant id paser en paramètre
+        let user = data[0];
 
-    // on va ajouter les autres propriétés qui seront modifié
-    // seulement si les valeurs ont étét envoyées
+        // on va ajouter les autres propriétés qui seront modifié
+        // seulement si les valeurs ont étét envoyées
+        if(email) user = {...user,email:email};
+        if(password) user = {...user,password:password};
+        if(bio) user = {...user,bio:bio};
+        if(picture) user = {...user,picture:picture};
+        if(isAdmin) user = {...user,isAdmin:isAdmin};
 
-    if(email) user = {...user,email:email};
-    if(password) user = {...user,password:password};
-    if(bio) user = {...user,bio:bio};
-    if(picture) user = {...user,picture:picture};
-    if(isAdmin) user = {...user,isAdmin:isAdmin};
+        // on met la date de modification a la date du moment
+        user = {...user, updatedAt:new Date()};
 
-    user = {...user, updatedAt:new Date()};
-
-    console.log(user);
-
-    /// pon passe  la fonction updateUser l'identifiant et les infos a modifié
-    let result = UserService.updateUsers(user);
-    result
-    .then(data => res.json({success:true,message:`utilisateur modifiÃ©`,data:data}))
-    .catch(err => console.log(err));
+        // on enegistre les modifications
+        const updated  = UserService.updateUsers(user)
+        updated
+        .then(data => res.json({message:"utilisateur modifié"}))
+        .catch((error) => {console.log(err.message)});
+    })
+    .catch((error) => console.log(error.message));
 }
 //patch modifie certains attributs alors que put modifie tous les attributs
 
