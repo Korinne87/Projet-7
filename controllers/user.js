@@ -30,32 +30,32 @@ export const deleteUser = (req,res) => {
 
 export const updateUser = (req,res) => {
 
-    // recuperer l'identifiant du user a modifié
+    // recuperer l'identifiant du user a modifier
     let { id } = req.params;
-    // recuperer toutes les infos qui sont envoyer pour modification
+    // rÃ©cupÃ©rer toutes les infos qui sont envoyÃ©es pour modification
     let { email, password, bio, picture, isAdmin } = req.body
 
-    // on utilise notre fonction getUserById pour allez recuperer l'utilisateur a modifié
+    // on utilise notre fonction getUserById pour aller rÃ©cupÃ©rer l'utilisateur Ã  modifier
     const result = UserService.getUsersById(id);
     result.then(function(data) {
-        // on recupère l'utilisateur avec l'identifiant id paser en paramètre
+        // on recupÃ¨re l'utilisateur avec l'identifiant id passÃ© en paramÃ¨tre
         let user = data[0];
 
-        // on va ajouter les autres propriétés qui seront modifié
-        // seulement si les valeurs ont étét envoyées
+        // on va ajouter les autres propriÃ©tÃ©s qui seront modifiÃ©es
+        // seulement si les valeurs ont Ã©tÃ© envoyÃ©es
         if(email) user = {...user,email:email};
         if(password) user = {...user,password:password};
         if(bio) user = {...user,bio:bio};
         if(picture) user = {...user,picture:picture};
         if(isAdmin) user = {...user,isAdmin:isAdmin};
 
-        // on met la date de modification a la date du moment
+        // on met la date de modification Ã  la date du moment
         user = {...user, updatedAt:new Date()};
 
         // on enegistre les modifications
         const updated  = UserService.updateUsers(user)
         updated
-        .then(data => res.json({message:"utilisateur modifié"}))
+        .then(data => res.json({message:"utilisateur modifiï¿½"}))
         .catch((error) => {console.log(err.message)});
     })
     .catch((error) => console.log(error.message));

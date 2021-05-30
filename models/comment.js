@@ -6,13 +6,13 @@ module.exports = (sequelize, DataTypes) => {
   class Comment extends Model {
 
     static associate(models) {
-      models.belongsTo(models.User, 
+      models.Comment.belongsTo(models.User, 
         { foreignKey: {
           allowNull: false
          
         }, onDelete:'CASCADE',
       }),
-        models.belongsTo(models.Post, 
+        models.Comment.belongsTo(models.Post, 
           { foreignKey: {
             allowNull: false,
                

@@ -1,6 +1,7 @@
 import express from 'express';
 import userRoute from './routes/user.js';
 import commentRoute from './routes/comment.js';
+import postRoute from './routes/post.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -25,5 +26,6 @@ app.get('/',(req, res) => {
 });
 app.use('/User', userRoute);
 app.use('/Comment', commentRoute);
+app.use('/Post', postRoute);
 app.listen(port, () => console.log(`serveur démarré sur le port: http://localhost:${port}`)); // ce doit tjrs être la dernière ligne du fichier
 
