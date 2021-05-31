@@ -39,7 +39,7 @@ export class CommentService {
              let db = DbService.getConnexion();
              db.query(query,[postId, userId, content, createdAt, updatedAt], (err,result) =>{
                 if (err) reject(new Error(err.message));
-                resolve(result.insertId);
+                resolve(result);
              });
          });  
          return response;
@@ -62,12 +62,12 @@ export class CommentService {
          console.log(error.message);
         }
     }
-    static async updateComments({id,postId, userId, content, updatedAt}) {
+    static async updateComments({ id, content, updatedAt}) {
         try {
          const response = await new Promise((resolve, reject) => {
-             const query= "UPDATE comments SET postId = ?, userId = ?, content = ?, updatedAt = ? WHERE id = ?";
+             const query= "UPDATE comments SET content = ?, updatedAt = ? WHERE id = ?";
              let db = DbService.getConnexion();
-             db.query(query,[id,postId, userId, content, updatedAt], (err,result) =>{
+             db.query(query, [content, updatedAt, id], (err,result) =>{
                 if (err) reject(new Error(err.message));
                 resolve(result.affectedRows);
              });

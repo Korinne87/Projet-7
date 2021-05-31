@@ -39,7 +39,7 @@ export class PostService {
              let db = DbService.getConnexion();
              db.query(query,[userId, title, content, createdAt, updatedAt], (err,result) =>{
                 if (err) reject(new Error(err.message));
-               // resolve(result.insertId);
+                resolve(result);
              });
          });  
          return response;
@@ -47,7 +47,7 @@ export class PostService {
          console.log(error.message);
         }
     }
-    static async deleteComment(id) {
+    static async deletePost(id) {
         try {
          const response = await new Promise((resolve, reject) =>{
              const query= "DELETE FROM posts where id=?";

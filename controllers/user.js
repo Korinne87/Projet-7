@@ -1,6 +1,6 @@
 import { UserService } from '../service/user.js';
 
-let users = []
+
 
 export const createUser = (req,res) => {
     //console.log(req.body);

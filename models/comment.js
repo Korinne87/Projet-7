@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     content: DataTypes.TEXT,   
     createdAt: DataTypes.NOW,
-    updateAt: DataTypes.NOW
+    updatedAt: DataTypes.NOW
     
   }, {
     sequelize,

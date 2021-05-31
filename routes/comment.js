@@ -4,7 +4,7 @@ import { getComments, getCommentById, createComment, deleteComment, updateCommen
 const router = express.Router();
 
 router.get('/', getComments);
-router.get('/', getCommentById);
+router.get('/:id', getCommentById);
 router.post('/', createComment);
 router.delete('/:id', deleteComment);
 router.patch('/:id', updateComment);

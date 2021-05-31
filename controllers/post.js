@@ -1,12 +1,12 @@
-import { v4 as uuidv4 } from 'uuid';
+
 import { PostService } from '../service/post.js';
 
-let posts = []
+
 
 export const createPost = (req,res) => {
     let post = req.body;
     let createDate = new Date();
-    post = { ...post, createdAt:createDate, updatedAt:createDate, id:uuidv4() };
+    post = { ...post, createdAt:createDate, updatedAt:createDate };
     let result = PostService.createPosts(post);
     result
     .then(data => res.json({success:true,message:`post ajouté`,data:data}))
