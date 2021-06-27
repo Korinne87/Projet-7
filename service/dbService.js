@@ -1,4 +1,4 @@
-import mysql from 'mysql';
+import mysql from 'mysql2';
 import dotenv from 'dotenv';
 dotenv.config();
 let instance = null;
@@ -12,7 +12,7 @@ const connexion = mysql.createConnection({
 
 connexion.connect((err) => {
     if (err) console.log(err.message);
-    console.log('db ' + connexion.state);
+    console.log('Database connected successfully');
 });
 
 export class DbService {

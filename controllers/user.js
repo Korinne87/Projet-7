@@ -1,13 +1,11 @@
 import { UserService } from '../service/user.js';
 
-let users = []
-
 export const createUser = (req,res) => {
     //console.log(req.body);
     let user = req.body;
     let createDate = new Date();
     user = {...user, createdAt:createDate, updatedAt:createDate};
-    //console.log(user);
+    console.log(user);
     let result = UserService.createUsers(user);
     result
     .then(data => res.json({success:true,message:`utilisateur crÃ©Ã©`,data:data}))
@@ -30,32 +28,35 @@ export const deleteUser = (req,res) => {
 
 export const updateUser = (req,res) => {
 
-    // recuperer l'identifiant du user a modifié
+    // recuperer l'identifiant du user a modifiï¿½
     let { id } = req.params;
     // recuperer toutes les infos qui sont envoyer pour modification
-    let { email, password, bio, picture, isAdmin } = req.body
+    let { email, password, bio, picture, isAdmin, lastname, firstname } = req.body
 
-    // on utilise notre fonction getUserById pour allez recuperer l'utilisateur a modifié
+    // on utilise notre fonction getUserById pour allez recuperer l'utilisateur a modifiï¿½
     const result = UserService.getUsersById(id);
     result.then(function(data) {
-        // on recupère l'utilisateur avec l'identifiant id paser en paramètre
+        // on recupï¿½re l'utilisateur avec l'identifiant id paser en paramï¿½tre
         let user = data[0];
 
-        // on va ajouter les autres propriétés qui seront modifié
-        // seulement si les valeurs ont étét envoyées
+        // on va ajouter les autres propriï¿½tï¿½s qui seront modifiï¿½
+        // seulement si les valeurs ont ï¿½tï¿½t envoyï¿½es
         if(email) user = {...user,email:email};
         if(password) user = {...user,password:password};
         if(bio) user = {...user,bio:bio};
         if(picture) user = {...user,picture:picture};
         if(isAdmin) user = {...user,isAdmin:isAdmin};
+        if(firstname) user = {...user,firstname:firstname};
+        if(lastname) user = {...user,lastname:lastname};
 
         // on met la date de modification a la date du moment
         user = {...user, updatedAt:new Date()};
 
+        console.log(user);
         // on enegistre les modifications
         const updated  = UserService.updateUsers(user)
         updated
-        .then(data => res.json({message:"utilisateur modifié"}))
+        .then(data => res.json({message:"success"}))
         .catch((error) => {console.log(err.message)});
     })
     .catch((error) => console.log(error.message));
@@ -77,4 +78,19 @@ export const getUserById = (req,res) => {
     .then(data => res.json({data:data}))
     .catch((err) => console.log(err.message));
     
+}
+
+export const login = (req,res) => {
+    let credentials = req.body;
+    console.log(credentials);
+    const results = UserService.login(credentials);
+    results.then(data => {
+        if(data.length) {
+            console.log(data);
+            res.json({ exist: true, user: data });
+        }
+        else
+            res.json({ exist: false });
+    })
+    .catch(err => console.log(err.message));
 }

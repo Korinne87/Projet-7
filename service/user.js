@@ -3,8 +3,10 @@ export class UserService {
     static async getAllUsers() {
         try {
          const response = await new Promise((resolve, reject) =>{
-             const query= "SELECT * FROM USERS;";
+             const query= "SELECT firstname,lastname,Email,Username,sexe FROM USERS;";
+             
              let db = DbService.getConnexion();
+             console.log(query);
              db.query(query,(err,results) =>{
                 if (err) reject(new Error(err.message));
                 resolve(results);
@@ -19,7 +21,7 @@ export class UserService {
     static async getUsersById(id) {
         try {
          const response = await new Promise((resolve, reject) =>{
-             const query= "SELECT * FROM USERS where id=?;";
+             const query= "SELECT firstname,lastname,Email,Username,sexe FROM USERS where id=?;";
              let db = DbService.getConnexion();
              db.query(query,[id],(err,results) =>{
                 if (err) reject(new Error(err.message));
@@ -32,14 +34,30 @@ export class UserService {
         }
     }
 
-    static async createUsers({username, email, password, picture, bio, isAdmin, createdAt, updatedAt}) {
+    static async login({username,password}){
+        try{
+            const response = await new Promise((resolve,reject) => {
+                const query = "SELECT * FROM USERS WHERE Username = ? and Password = ?";
+                let db = DbService.getConnexion();
+                db.query(query,[username,password], (err,result) => {
+                    if(err) reject(new Error(err.message));
+                    resolve(result);
+                });
+            });
+            return response;
+        } catch(error) {
+            console.log(error.message);
+        }
+    }
+
+    static async createUsers({username, email, password, picture, bio, isAdmin, createdAt, updatedAt, firstname, lastname,sexe}) {
         try {
          const response = await new Promise((resolve, reject) =>{
-             const query= "INSERT INTO USERS(username, email, password, picture, bio, isAdmin, createdAt, updatedAt) VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
+             const query= "INSERT INTO USERS(Username, Email, Password, Picture, Bio, IsAdmin, createdAt, updateddAt,firstname,lastname,sexe) VALUES(?, ?, ?, ?, ?, ?, ?, ?,?,?,?);";
              let db = DbService.getConnexion();
-             db.query(query,[username, email, password, picture, bio, isAdmin, createdAt, updatedAt], (err,result) =>{
+             db.query(query,[username, email, password, picture, bio, isAdmin, createdAt, updatedAt,firstname, lastname, sexe], (err,result) =>{
                 if (err) reject(new Error(err.message));
-                resolve(result.insertId);
+                resolve(result.affectedRows);
              });
          });  
          return response;
@@ -62,12 +80,13 @@ export class UserService {
          console.log(error.message);
         }
     }
-    static async updateUsers({id,email, password, picture, bio, isAdmin,updatedAt}) {
+    static async updateUsers({Id,Email, Password, Picture, Bio, IsAdmin,updatedAt,firstname,lastname}) {
         try {
+            console.log(Id);
          const response = await new Promise((resolve, reject) => {
-             const query= "UPDATE users SET email = ?, password = ?, picture = ?, bio = ?, isAdmin = ?, updatedAt = ? WHERE id = ?";
+             const query= "UPDATE users SET email = ?, password = ?, picture = ?, bio = ?, isAdmin = ?, updateddAt = ?, firstname = ?, lastname = ? WHERE id = ?";
              let db = DbService.getConnexion();
-             db.query(query,[email, password, picture, bio, isAdmin, updatedAt,id], (err,result) =>{
+             db.query(query,[Email, Password, Picture, Bio, IsAdmin, updatedAt,firstname,lastname,Id], (err,result) =>{
                 if (err) reject(new Error(err.message));
                 resolve(result.affectedRows);
              });

@@ -1,5 +1,6 @@
 import express from 'express';
 import userRoute from './routes/user.js';
+import postRoute from './routes/posts.js';
 import commentRoute from './routes/comment.js';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -24,6 +25,7 @@ app.get('/',(req, res) => {
   res.send('bonjour, bienvenue sur l API groupomania');
 });
 app.use('/User', userRoute);
+app.use('/Posts', postRoute);
 app.use('/Comment', commentRoute);
 app.listen(port, () => console.log(`serveur démarré sur le port: http://localhost:${port}`)); // ce doit tjrs être la dernière ligne du fichier
 
